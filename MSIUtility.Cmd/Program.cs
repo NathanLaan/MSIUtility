@@ -12,16 +12,19 @@ namespace MSIUtility.Cmd {
         //          -f "{pn}-v{pv}.msi"     : Specify the format of the output filename.
         //
         static void Main(string[] args) {
-            string inputFileName;
+            string inputFileName = string.Empty;
+            string outputPath = string.Empty;
             string productName = "[ProductName]";
             string productVersion;
 
-            if (args.Length == 0) {
-                Console.WriteLine("Enter MSI filename: ");
+            if (args.Length < 2) {
+                Console.WriteLine("Missing input file name and output path parameters.");
                 inputFileName = Console.ReadLine();
             }
             else {
                 inputFileName = args[0];
+                outputPath = args[1];
+                Console.WriteLine("outputPath: " + outputPath);
             }
 
             try {
@@ -36,7 +39,7 @@ namespace MSIUtility.Cmd {
                 //
                 // TODO: Allow user to specify the format string, something like "{pn}-v{pv}.msi"
                 //
-                string outputFileName = string.Format("{0}-v{1}.msi", productName, productVersion);
+                string outputFileName = string.Format(outputPath + Path.DirectorySeparatorChar + "{0}-v{1}.msi", productName, productVersion);
 
                 Console.WriteLine("Output File Name: " + outputFileName);
                 File.Copy(inputFileName, outputFileName, true);
