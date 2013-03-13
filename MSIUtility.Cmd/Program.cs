@@ -24,7 +24,6 @@ namespace MSIUtility.Cmd {
             else {
                 inputFileName = args[0];
                 outputPath = args[1];
-                Console.WriteLine("outputPath: " + outputPath);
             }
 
             try {
