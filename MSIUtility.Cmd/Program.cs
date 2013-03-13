@@ -2,36 +2,34 @@
 using System.IO;
 using WindowsInstaller;
 
-namespace MSIUtility.Cmd
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
+namespace MSIUtility.Cmd {
+
+    class Program {
+
+        //
+        // TODO: Include the following command-line arguments: 
+        //          -d                      : Delete the input file.
+        //          -f "{pn}-v{pv}.msi"     : Specify the format of the output filename.
+        //
+        static void Main(string[] args) {
             string inputFileName;
             string productName = "[ProductName]";
             string productVersion;
 
-            if (args.Length == 0)
-            {
+            if (args.Length == 0) {
                 Console.WriteLine("Enter MSI filename: ");
                 inputFileName = Console.ReadLine();
             }
-            else
-            {
+            else {
                 inputFileName = args[0];
             }
 
-            try
-            {
-
-                if (inputFileName.EndsWith(".msi", StringComparison.OrdinalIgnoreCase))
-                {
+            try {
+                if (inputFileName.EndsWith(".msi", StringComparison.OrdinalIgnoreCase)) {
                     productName = GetMsiProperty(inputFileName, "ProductName");
                     productVersion = GetMsiProperty(inputFileName, "ProductVersion");
                 }
-                else
-                {
+                else {
                     return;
                 }
 
@@ -42,17 +40,19 @@ namespace MSIUtility.Cmd
 
                 Console.WriteLine("Output File Name: " + outputFileName);
                 File.Copy(inputFileName, outputFileName, true);
+
+                //
+                // TODO: Allow user to specify whether or not to delete the input file
+                //
                 //File.Delete(inputFileName);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine(ex.Message);
             }
         }
 
-        static string GetMsiProperty(string msiFile, string property)
-        {
-            string retVal = string.Empty;
+        static string GetMsiProperty(string msiFile, string property) {
+            string propertyValue = string.Empty;
 
             // Create an Installer instance  
             Type classType = Type.GetTypeFromProgID("WindowsInstaller.Installer");
@@ -70,16 +70,17 @@ namespace MSIUtility.Cmd
 
             // Read in the fetched record  
             Record record = view.Fetch();
-            if (record != null)
-            {
-                retVal = record.get_StringData(1);
+            if (record != null) {
+                propertyValue = record.get_StringData(1);
                 System.Runtime.InteropServices.Marshal.FinalReleaseComObject(record);
             }
             view.Close();
             System.Runtime.InteropServices.Marshal.FinalReleaseComObject(view);
             System.Runtime.InteropServices.Marshal.FinalReleaseComObject(database);
 
-            return retVal;
+            return propertyValue;
         }
+
     }
+
 }
