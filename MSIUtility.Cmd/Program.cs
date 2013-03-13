@@ -38,8 +38,11 @@ namespace MSIUtility.Cmd
                 //
                 // TODO: Allow user to specify the format string, something like "{pn}-v{pv}.msi"
                 //
-                File.Copy(inputFileName, string.Format("{0}-v{1}.msi", productName, productVersion));
-                File.Delete(inputFileName);
+                string outputFileName = string.Format("{0}-v{1}.msi", productName, productVersion);
+
+                Console.WriteLine("Output File Name: " + outputFileName);
+                File.Copy(inputFileName, outputFileName, true);
+                //File.Delete(inputFileName);
             }
             catch (Exception ex)
             {
